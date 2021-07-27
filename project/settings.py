@@ -50,7 +50,6 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'mechs',
     'crispy_forms',
     'rest_framework',
     "cloudinary",
