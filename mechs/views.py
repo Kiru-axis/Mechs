@@ -19,4 +19,14 @@ def signup(request):
 
 def index(request):
     return render(request, 'mechs/index.html')
+
+def about(request):
+    return render(request, 'mechs/about.html')
+
+def services(request):
+    return render(request, 'mechs/services.html')
+
+def mechanics(request):
+    return render(request, 'mechs/mechanics.html')
+    
     

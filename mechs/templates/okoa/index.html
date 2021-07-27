@@ -1,8 +1,9 @@
-{%extends "mechs/base.html"%}
+{%extends "okoa/layout.html"%}
 {%load static%}
 {%block content%}
 <h3 class="text-center">Mechanics</h3>
         <!--Carousel Wrapper-->
+        {%for mech in mechanic%}
 <div id="multi-item-example" class="carousel slide carousel-multi-item" data-ride="carousel">
 
     <!--Controls-->
@@ -33,11 +34,10 @@
               src="https://mdbootstrap.com/img/Photos/Horizontal/Nature/4-col/img%20(34).jpg"
               alt="Card image cap">
             <div class="card-body">
-              <h4 class="card-title">Peter</h4>
-              <p class="card-text"><span>Age: </span> 45</p>
-              <p class="card-text"><span>Experience: </span> 15 years</p>
-              <p class="card-text"><span>Location: </span> Kiambu</p>
-              <p class="card-text"><span>Rating: </span> 8.6</p>
+              <h4 class="card-title">{{mech.name}}</h4>
+              <p class="card-text"><span>Age: </span> {{mech.age}}</p>
+              <p class="card-text"><span>Location: </span> {{mech.location}}</p>
+              <p class="card-text"><span>Rating: </span> {{mech.ratings}}</p> </p>
               <a class="btn btn-sm btn-outline-primary" href="">Comment</a>
             </div>
           </div>
@@ -51,5 +51,6 @@
     <!--/.Slides-->
   
   </div>
+  {% endfor %}
   <!--/.Carousel Wrapper-->
 {% endblock %}

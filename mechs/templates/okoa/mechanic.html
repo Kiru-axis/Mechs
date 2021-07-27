@@ -1,0 +1,13 @@
+{%extends "okoa/layout.html"%}
+{%load static%}
+{%block content%}
+<div class="container bg-info">
+  <div class="card-body">
+    <h4 class="card-title"> {{mech.name}} </h4>
+    <p class="card-text"><span>Age: </span>{{mech.age}}</p> </p>
+    <p class="card-text"><span>Location: </span> {{mech.location}}</p> </p>
+    <p class="card-text"><span>Rating: </span> {{mech.ratings}}</p> </p>
+    <a class="btn btn-sm btn-outline-primary" href="">Comment</a>
+  </div>
+</div>
+{%endblock%}
