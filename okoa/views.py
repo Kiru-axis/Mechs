@@ -69,7 +69,7 @@ def user_profile(request, username):
 
     }
     return render(request, 'okoa/user_profile.html', params)
-
+@login_required(login_url='login')
 def mechanic(request,id):
     mechanic = Mechanic.objects.get(id=id)
     ratings = Rating.objects.filter(user=request.user, mechanic=mechanic).first()
