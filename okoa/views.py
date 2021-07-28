@@ -115,3 +115,11 @@ def mechanic(request,id):
 
     }
     return render(request, 'okoa/mechanic.html', params)
+
+@login_required(login_url='login')
+def services(request):
+
+    context = {
+       "mechanic":Mechanic.objects.all()
+   }
+    return render(request, 'okoa/services.html',context)
