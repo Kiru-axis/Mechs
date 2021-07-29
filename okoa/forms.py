@@ -1,7 +1,8 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
-from .models import Profile,Rating
+from django.forms import widgets
+from .models import Profile,Rating,Comment
 
 
 
@@ -30,17 +31,10 @@ class RatingsForm(forms.ModelForm):
         model = Rating
         fields = ['communication', 'punctuality', 'workrate']
 
-# class PostForm(forms.ModelForm):
-#     class Meta:
-#         model = Post
-#         fields = ('image',)
-
-# class CommentForm(forms.ModelForm):
-#     def __init__(self, *args, **kwargs):
-#         super().__init__(*args, **kwargs)
-#         self.fields['comment'].widget = forms.TextInput()
-#         self.fields['comment'].widget.attrs['placeholder'] = 'Add a comment...'
-
-#     class Meta:
-#         model = Comment
-#         fields = ('comment',)
+class CommentForm(forms.ModelForm):
+    class Meta:
+        model = Comment
+        fields= ("body",)
+        widgets = {
+            "body":forms.Textarea(attrs={'class':'form-control'}),
+        }
