@@ -2,7 +2,7 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.db.models.signals import post_save
 from django.dispatch import receiver
-from django.utils import timezone
+from datetime import datetime
 # Create your models here.
 from cloudinary.models import CloudinaryField
 
@@ -34,7 +34,7 @@ class Rating(models.Model):
     workrate_average = models.FloatField(default=0, blank=True)
 
     def __str__(self):
-        return f'{self.score} Rating'
+        return f'{self.score}'
 
 class Mechanic(models.Model):
     name = models.CharField(max_length=80, blank=True)
@@ -56,4 +56,16 @@ class Profile(models.Model):
     contact = models.EmailField(max_length=100, blank=True)
 
     def __str__(self):
-        return f'{self.user.username} Profile'
+        return f'{self.user.username}'
+
+class Comment(models.Model):
+    commenter = models.ForeignKey(Profile, on_delete=models.CASCADE,related_name="profile")
+    mechanic=models.ForeignKey(Mechanic, on_delete=models.SET_NULL,null=True,related_name="comments")
+    body = models.TextField()
+    created = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f'{self.commenter.user} {self.mechanic.name}'
+
+    class Meta:
+        ordering = ["-pk"]
