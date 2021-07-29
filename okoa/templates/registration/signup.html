@@ -14,14 +14,14 @@
                     <form action="" method="post" novalidate>
                         {% csrf_token%}
                         {{ form|crispy}}
-                        <button type="submit" class="btn btn-success btn-sm"> Sign up</button>
+                        <button type="submit" class="btn btn-primary btn-sm"> Sign up</button>
                         
                     </form>
                 </div>
             </div>
             <div class="card mt-2">
                 <div class="card-body mt-3 mb-3 mr-2 ml-4">
-                    Already have an account? <a href="{% url 'login' %}">Login</a>
+                    Already have an account? <a class="text-info " href="{% url 'login' %}">Login</a>
                 </div>
             </div>
             <div container>

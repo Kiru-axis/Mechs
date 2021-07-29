@@ -1,0 +1,72 @@
+{%extends "okoa/layout.html"%} {%load static%} {%block content%}
+<div class="container">
+  <div class="sub-banner overview-bgi">
+    <div class="container breadcrumb-area">
+        <div class="breadcrumb-areas">
+            <h1>Services</h1>
+            <ul class="breadcrumbs">
+                <li><a href="{% url 'index'%}">Home</a></li>
+                <li class="active">Mechanics</li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+  <!-- Team -->
+  <section id="team" class="pb-5">
+    <div class="container">
+      <h5 class="section-title h1">MECHANICS</h5>
+      <div class="row">
+        {% for comment in comments %}
+  <div class="col-xs-12 col-sm-6 col-md-4 ">
+    <div class="image-flip " ontouchstart="this.classList.toggle('hover'); ">
+        <div class="mainflip ">
+            <div class="frontside" >
+                
+            </div>
+            <div class="backside">
+                <div class="card">
+                    <div class="card-body mt-4">
+                        <h4 class="my-2" ><span>Name: </span> {{comment.user}</h4> </h4>
+                        <h4 class="my-2" ><span>Age: </span> {{comment.body}}</h4> </h4>
+                        <h4 class="my-2" ><span>Location: </span> {{comment.post}}</h4> 
+                        <h4 class="my-2" ><span>Rating: </span> {{comment.created}}</h4>
+                        <h4><a href="" class="">Rate</a></h4>
+                        <p class="card-text">This is basic card with image on top, title, description and button.This is basic card with image on top, title, description and button.This is basic card with image on top, title, description and button.</p>
+                        <ul class="list-inline">
+                            <li class="list-inline-item">
+                                <a class="social-icon text-xs-center" target="_blank" href="#">
+                                    <i class="fa fa-facebook"></i>
+                                </a>
+                            </li>
+                            <li class="list-inline-item">
+                                <a class="social-icon text-xs-center" target="_blank" href="#">
+                                    <i class="fa fa-twitter"></i>
+                                </a>
+                            </li>
+                            <li class="list-inline-item">
+                                <a class="social-icon text-xs-center" target="_blank" href="#">
+                                    <i class="fa fa-skype"></i>
+                                </a>
+                            </li>
+                            <li class="list-inline-item">
+                                <a class="social-icon text-xs-center" target="_blank" href="#">
+                                    <i class="fa fa-google"></i>
+                                </a>
+                            </li>
+                        </ul>
+                        <a href="{% url 'mechanic' mech.id%}" class="btn btn-block btn-outline-info">Learn More</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endfor %}
+
+      </div>
+    </div>
+  </section>
+  <!-- Team -->
+</div>
+{% endblock %}
