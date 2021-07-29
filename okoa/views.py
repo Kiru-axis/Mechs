@@ -1,11 +1,12 @@
 from django.shortcuts import render, redirect,get_object_or_404
 from django.contrib.auth import login, authenticate
 from django.contrib.auth.models import User
-from .forms import SignUpForm,UpdateUserForm, UpdateUserProfileForm,RatingsForm
+from .forms import SignUpForm,UpdateUserForm, UpdateUserProfileForm,RatingsForm,CommentForm
 from django.contrib.auth.decorators import login_required
-from django.http import HttpResponseRedirect, JsonResponse
-from .models import Mechanic,Rating
-
+from django.http import HttpResponseRedirect, JsonResponse,HttpResponse
+from .models import Mechanic,Rating,Comment
+from django.core.mail import send_mail
+from django.utils import timezone
 # Create your views here.
 
 # signup
@@ -18,7 +19,7 @@ def signup(request):
             raw_password = form.cleaned_data.get('password1')
             user = authenticate(username=username, password=raw_password)
             login(request, user)
-            return redirect('index')
+            return redirect('login')
     else:
         form = SignUpForm()
     return render(request, 'registration/signup.html', {'form': form})
@@ -60,18 +61,14 @@ def user_profile(request, username):
     user_prof = get_object_or_404(User, username=username)
     if request.user == user_prof:
         return redirect('profile', username=request.user.username)
-    user_posts = user_prof.profile.posts.all()
-    
-
     params = {
         'user_prof': user_prof,
-        'user_posts': user_posts,
 
     }
     return render(request, 'okoa/user_profile.html', params)
 @login_required(login_url='login')
-def mechanic(request,id):
-    mechanic = Mechanic.objects.get(id=id)
+def mechanic(request,pk):
+    mechanic = Mechanic.objects.get(id=pk)
     ratings = Rating.objects.filter(user=request.user, mechanic=mechanic).first()
     rating_status = None
     if ratings is None:
@@ -109,7 +106,7 @@ def mechanic(request,id):
     else:
         form = RatingsForm()
     params = {
-        'post': mechanic,
+        'mechanic': mechanic,
         'rating_form': form,
         'rating_status': rating_status
 
@@ -123,3 +120,70 @@ def services(request):
        "mechanic":Mechanic.objects.all()
    }
     return render(request, 'okoa/services.html',context)
+
+
+@login_required(login_url='login')
+def add_comment(request,pk):
+    mech = Mechanic.objects.get(id=pk)
+    form = CommentForm(instance=mech)
+    num_comments = Comment.objects.filter(mech=mech).count()
+    if request.method == 'POST':
+        form = CommentForm(request.POST,instance=mech)
+        if form.is_valid():
+            name = request.user.profile
+            body = form.cleaned_data['body']
+            c=Comment(mechanic=mech,commenter=name,body=body,created = timezone.now)
+            c.save()
+            return redirect('index')
+        else:
+            print("invalid form")
+    else:
+        form =CommentForm()
+    
+    context = {
+        'form':form,
+        "num_comments":num_comments,
+        }
+    return render(request, 'okoa/add_comments.html',context)
+
+
+@login_required(login_url='login')
+def contact(request):
+    if request.method == 'POST':
+        message_name = request.POST.get('message-name',False) 
+        message_email = request.POST.get('message-email',False) 
+        message = request.POST.get('message',False) 
+
+        send_mail(
+            message_name,
+            message,
+            message_email,
+            ["peter.kiru@student.moringaschool.com"]
+        ) 
+
+        return render(request, 'okoa/contact.html',{"message_name": message_name})
+    else:
+        return render(request, 'okoa/contact.html',{})
+
+
+def post_comment(request,id):
+    mech = get_object_or_404(Mechanic,pk=id)
+    if request.method == 'POST':
+        form = CommentForm(request.POST)
+        if form.is_valid():
+            savecomment=form.save(commit=False)
+            savecomment.post=mech
+            savecomment.user=request.user.profile
+            savecomment.save()
+            return HttpResponseRedirect(request.path_info)
+        else:
+            form=CommentForm()
+
+        params ={
+            "mech":mech,
+            "form":form,
+        }
+    return render(request, 'okoa/post.html')
+
+
+# userr profile
