@@ -126,7 +126,6 @@ def services(request):
 def add_comment(request,pk):
     mech = Mechanic.objects.get(id=pk)
     form = CommentForm(instance=mech)
-    num_comments = Comment.objects.filter(mech=mech).count()
     if request.method == 'POST':
         form = CommentForm(request.POST,instance=mech)
         if form.is_valid():
@@ -142,7 +141,7 @@ def add_comment(request,pk):
     
     context = {
         'form':form,
-        "num_comments":num_comments,
+        
         }
     return render(request, 'okoa/add_comments.html',context)
 
