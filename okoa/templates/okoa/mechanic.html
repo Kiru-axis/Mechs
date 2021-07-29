@@ -1,25 +1,26 @@
 {%extends "okoa/layout.html"%}
+{% load crispy_forms_tags %}
 {%load static%}
 {%block content%}
 <div class="container">
     <div class="row">
-        <div class="col-md-4">
+        <div class="col-md-2">
             <h3>image</h3>
-            <img src="{{mechanic.profile_picture.url}}" width="350" height="350" class="img-responsive" alt="col-md-2">
+            <img src="{{mechanic.profile_picture.url}}"  class="img-responsive img-fluid max-width: 100%" alt="{{mechanic.name}}">
         </div>
         <hr>
         <br>
-        <div class="col-md-3">
+        <div class="col-md-2">
             <h3>Details</h3>
             <div class="my-3">Name: {{mechanic.name}}</div>
             <div class="my-3">Age: {{mechanic.age}}</div> 
-            <div class="my-3">Rating: {{mechanic.rating}}</div> 
+            <div class="my-3">Rating: {{mechanic.ratings}}</div> 
             <div class="my-3">Location: {{mechanic.location}}</div>
             <a href="{%url 'contact'%}" class="btn btn-outline-success">Get</a>
-            <a href="" class="btn btn-outline-info">Add Comments</a>
+            <a href="{% url 'add-comment' mechanic.id %}" class="btn btn-outline-info">Add Comments</a>
         </div>
         <div class="col-md-5">
-            <h3>Related Comments ()</h3>
+            <h3>Related Comments ({{num_comments}})</h3>
             {% if not mechanic.comments.all%}
             <div>no comments</div>
             {%else%}
@@ -47,17 +48,21 @@
             </div>
             {% endfor %}
            {% endif %}
-          <!-- <h2>Related Comments</h2>
-           <p>add a comment</p>
-           {% if not mechanic.comments.all%}
-              <div>no comments</div>
-           {%else%}
-           {% for comment in mechanic.comments.all%}
-              <div>{{comment.commenter}}</div>
-              <div>{{comment.body}}</div>
-              <div>{{comment.created}}</div>
-           {% endfor %}
-           {% endif %} -->
+        </div>
+        <div class="col-md-3">
+            <h3>Rate Mechanic</h3>
+             <!-- user ratings -->
+             {% if rating_status %}
+             <h5>You have already voted!! chill</h5>
+             {% else %}
+             {% if user.is_authenticated %}
+             <form action="" method="post" enctype="multipart/form-data">
+                 {% csrf_token %}
+                 {{rating_form|crispy}}
+                 <button class="btn btn-sm btn-success">Rate</button>
+             </form>
+             {% endif %}
+             {% endif %}
         </div>
     </div>
 </div>

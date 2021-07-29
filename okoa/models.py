@@ -34,7 +34,7 @@ class Rating(models.Model):
     workrate_average = models.FloatField(default=0, blank=True)
 
     def __str__(self):
-        return f'{self.score}'
+        return f'{self.score} {self.user.username}'
 
 class Mechanic(models.Model):
     name = models.CharField(max_length=80, blank=True)

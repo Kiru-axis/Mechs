@@ -35,6 +35,9 @@ def index(request):
    }
     return render(request, 'okoa/index.html',context)
 
+# test Profile
+
+
 # profile function
 @login_required(login_url='login')
 def profile(request, username):
@@ -56,16 +59,6 @@ def profile(request, username):
     return render(request, 'okoa/profile.html', params)
 
 # user update profile function
-@login_required(login_url='login')
-def user_profile(request, username):
-    user_prof = get_object_or_404(User, username=username)
-    if request.user == user_prof:
-        return redirect('profile', username=request.user.username)
-    params = {
-        'user_prof': user_prof,
-
-    }
-    return render(request, 'okoa/user_profile.html', params)
 @login_required(login_url='login')
 def mechanic(request,pk):
     mechanic = Mechanic.objects.get(id=pk)
@@ -141,7 +134,6 @@ def add_comment(request,pk):
     
     context = {
         'form':form,
-        
         }
     return render(request, 'okoa/add_comments.html',context)
 
@@ -163,26 +155,6 @@ def contact(request):
         return render(request, 'okoa/contact.html',{"message_name": message_name})
     else:
         return render(request, 'okoa/contact.html',{})
-
-
-def post_comment(request,id):
-    mech = get_object_or_404(Mechanic,pk=id)
-    if request.method == 'POST':
-        form = CommentForm(request.POST)
-        if form.is_valid():
-            savecomment=form.save(commit=False)
-            savecomment.post=mech
-            savecomment.user=request.user.profile
-            savecomment.save()
-            return HttpResponseRedirect(request.path_info)
-        else:
-            form=CommentForm()
-
-        params ={
-            "mech":mech,
-            "form":form,
-        }
-    return render(request, 'okoa/post.html')
 
 
 # userr profile
